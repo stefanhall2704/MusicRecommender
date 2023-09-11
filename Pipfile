@@ -8,6 +8,8 @@ requests = "*"
 uvicorn = "*"
 fastapi = {extras = ["all"], version = "*"}
 spotipy = "*"
+python-decouple = "*"
+black = "*"
 
 [dev-packages]
 
