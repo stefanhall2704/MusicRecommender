@@ -26,6 +26,7 @@ def upgrade() -> None:
         sa.Column("ArtistID", sa.String(100), nullable=False),
         sa.Column("Followers", sa.Integer, nullable=False),
         sa.Column("Genre", sa.Integer),
+        
     )
 
 

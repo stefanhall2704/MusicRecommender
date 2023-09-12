@@ -6,13 +6,13 @@ name = "pypi"
 [packages]
 requests = "*"
 uvicorn = "*"
-fastapi = {extras = ["all"], version = "*"}
 spotipy = "*"
 python-decouple = "*"
 black = "*"
 psycopg2 = "*"
 sqlalchemy = "*"
 alembic = "*"
+fastapi = {extras = ["all"], version = "*"}
 
 [dev-packages]
 
