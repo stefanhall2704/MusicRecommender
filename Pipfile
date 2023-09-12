@@ -10,6 +10,9 @@ fastapi = {extras = ["all"], version = "*"}
 spotipy = "*"
 python-decouple = "*"
 black = "*"
+psycopg2 = "*"
+sqlalchemy = "*"
+alembic = "*"
 
 [dev-packages]
 
