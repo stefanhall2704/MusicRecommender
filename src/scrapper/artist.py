@@ -20,11 +20,7 @@ Genres: Relate to table Genre ID
 # Number of artists you want to scrape
 total_artists_to_scrape = 100
 
-
-genres = requests.get("http://localhost:4000/api/genre/genres")
-
-for genre in genres.json():
-    genre = genre["name"]
+def upload_artists(genre: str) -> None:
     limit = 50
     offset = 1
 
@@ -46,4 +42,15 @@ for genre in genres.json():
             }
             requests.post("http://localhost:4000/api/artist/create", json=json_body)
             print(name)
-        offset += limit        
+        offset += limit   
+    
+def main():
+    genres = requests.get("http://localhost:4000/api/genre/genres")
+
+    for genre in genres.json():
+        genre = genre["name"]
+        upload_artists(genre=genre)
+
+if __name__ == "__main__":
+    main()
+     
