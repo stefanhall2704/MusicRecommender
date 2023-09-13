@@ -23,6 +23,15 @@ async def get_genre_from_db(database: Session, genre_id: int):
         raise Exception
     return database_genre
 
+async def get_all_db_genres(database: Session):
+    database_genres = (
+        database.query(Genre)
+        .all()
+    )
+    if not database_genres:
+        raise Exception
+    return database_genres
+
 async def create_db_genre(
     database: Session,
     name: str,
@@ -33,6 +42,16 @@ async def create_db_genre(
     database.commit()
     return database_genre
 
+
+@router.get(
+    "/genres"
+)
+async def get_all_genres(database: Session = Depends(get_db)):
+    try:
+        genres = await get_all_db_genres(database=database)
+    except Exception as e:
+        print(e)
+    return genres
 
 # region endpoints.post
 @router.post(
