@@ -20,7 +20,7 @@ limit = 50
 offset = 1
 
 while offset < total_artists_to_scrape:
-    results = spotify.sp.search(q='genre:"hip-hop"', type="artist", limit=limit, offset=offset)
+    results = spotify.sp.search(q='genre:"African-Percussion"', type="artist", limit=limit, offset=offset)
 
     for artist in results["artists"]["items"]:
         followers = artist["followers"]["total"]

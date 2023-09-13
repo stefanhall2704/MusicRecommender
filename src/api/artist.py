@@ -36,16 +36,19 @@ async def create_db_artist(
     popularity: int,
     genre: Optional[int]
 ):
-    database_artist = Artist()
-    database_artist.name = name
-    database_artist.artist_id = artist_id
-    database_artist.followers = followers
-    database_artist.popularity = popularity
-    if genre:
-        database_artist.genre = genre
-    database.add(database_artist)
-    database.commit()
-    return database_artist
+    try:
+        database_artist = Artist()
+        database_artist.name = name
+        database_artist.artist_id = artist_id
+        database_artist.followers = followers
+        database_artist.popularity = popularity
+        if genre:
+            database_artist.genre = genre
+        database.add(database_artist)
+        database.commit()
+        return database_artist
+    except IntegrityError:
+        raise HTTPException(status_code=400, detail="Artist with this name already exists")
 
 
 # region endpoints.post
@@ -55,6 +58,12 @@ async def create_db_artist(
 async def create_artist(
     artist_request: ArtistRequest, database: Session = Depends(get_db)
 ):
+    artist_exists = (
+        database.query(Artist)
+        .filter(Artist.artist_id == artist_request.artist_id)
+    )
+    if artist_exists:
+        return {"message": "Artist with this name already exists"}
     artist = await create_db_artist(database=database, 
         name=artist_request.name, 
         artist_id=artist_request.artist_id, 
