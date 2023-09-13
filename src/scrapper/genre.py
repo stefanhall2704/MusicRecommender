@@ -1383,9 +1383,16 @@ genres = ["A Cappella",
 "Zydeco"]
 import requests
 
-for genre in genres:
-    parsed_genre = genre.replace(" ", "-")
+# for genre in genres:
+#     parsed_genre = genre.replace(" ", "-")
+#     json_body = {
+#         "name": parsed_genre
+#     }    
+#     requests.post("http://localhost:4000/api/genre/create", json=json_body)
+count = 1
+while count < 5:
     json_body = {
-        "name": parsed_genre
-    }    
-    requests.post("http://localhost:4000/api/genre/create", json=json_body)
+        "id": count
+    }
+    requests.delete(f"http://localhost:4000/api/artist/related/delete?id={count}")
+    count += 1

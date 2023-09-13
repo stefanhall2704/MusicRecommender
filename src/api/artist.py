@@ -1,4 +1,4 @@
-from src.utils.models import Artist
+from src.utils.models import Artist, Genre, ArtistRelatedGenre
 from sqlalchemy.orm import Session
 from fastapi import Depends, APIRouter
 from src.utils.dependency import get_db
@@ -15,7 +15,7 @@ class ArtistRequest(BaseModel):
     artist_id: str
     followers: int
     popularity: int
-    genre: Optional[int]
+    genre: list
     
 
 async def get_artist_from_db(database: Session, artist_id: int):
@@ -27,6 +27,50 @@ async def get_artist_from_db(database: Session, artist_id: int):
     if not database_artist:
         raise Exception
     return database_artist
+
+async def get_artist_from_db_by_artist_id(database: Session, artist_id: int):
+    database_artist = (
+        database.query(Artist)
+        .filter(Artist.artist_id == artist_id)
+        .first()
+    )
+    if not database_artist:
+        raise Exception
+    return database_artist
+
+async def get_db_genre_related_artist(database: Session, id: int):
+    database_artist = (
+        database.query(ArtistRelatedGenre)
+        .filter(ArtistRelatedGenre.ID == id)
+        .first()
+    )
+    if not database_artist:
+        raise Exception
+    return database_artist
+
+async def get_db_genre_by_name(databse: Session, genre: str):
+    genre = genre.title()
+    db_genre = (
+        databse.query(Genre)
+        .filter(Genre.name == genre)
+        .first()
+    )
+    if not db_genre:
+        return {"genre_error": "Genre Does not Exist"}
+    return db_genre
+
+async def create_db_genre_related_artist(
+    database: Session,
+    artist_id: int,
+    genre_id: int
+):
+
+    database_genre_related_artist = ArtistRelatedGenre()
+    database_genre_related_artist.artist_id = artist_id
+    database_genre_related_artist.genre_id = genre_id
+    database.add(database_genre_related_artist)
+    database.commit()
+    return database_genre_related_artist
 
 async def create_db_artist(
     database: Session,
@@ -61,17 +105,28 @@ async def create_artist(
     artist_exists = (
         database.query(Artist)
         .filter(Artist.artist_id == artist_request.artist_id)
+        .first()
     )
     if artist_exists:
         return {"message": "Artist with this name already exists"}
-    artist = await create_db_artist(database=database, 
+    genres = artist_request.genre
+    artist_id = artist_request.artist_id
+    await create_db_artist(database=database, 
         name=artist_request.name, 
-        artist_id=artist_request.artist_id, 
+        artist_id=artist_id, 
         followers=artist_request.followers,
         popularity=artist_request.popularity,
-        genre=artist_request.genre 
+        genre=0
     )
-    return artist
+    db_artist = await get_artist_from_db_by_artist_id(database=database, artist_id=artist_id)
+    db_artist_id = db_artist.ID
+    print(genres)
+    for genre in genres:
+        print(genre)
+        db_genre = await get_db_genre_by_name(databse=database, genre=genre)        
+        db_genre_id = db_genre.ID
+        await create_db_genre_related_artist(database=database, artist_id=db_artist_id, genre_id=db_genre_id)
+    return {"Done": "Success"}
 
 @router.delete("/delete")
 async def delete_artist(
@@ -83,3 +138,13 @@ async def delete_artist(
     database.delete(artist)
     database.commit()
     return {"name": name}
+
+@router.delete("/related/delete")
+async def delete_related_artist(
+    id: int,
+    database: Session = Depends(get_db)
+):
+    artist = await get_db_genre_related_artist(database=database, id=id)
+    database.delete(artist)
+    database.commit()
+    return {"Success"}

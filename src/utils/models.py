@@ -24,6 +24,6 @@ class Genre(Base):
 
 class ArtistRelatedGenre(Base):
     __tablename__ = "ArtistRelatedGenre"
-    ID = sa.Column(sa.Integer(), primary_key=True, nullable=False, name='ID')
+    ID = sa.Column(sa.Integer(), primary_key=True, index=True, nullable=False, name='ID')
     artist_id = sa.Column(sa.Integer(), sa.ForeignKey("Artist.ID"), nullable=False, name='ArtistID')
     genre_id = sa.Column(sa.Integer(), sa.ForeignKey("Genre.ID"), nullable=False, name='GenreID')
