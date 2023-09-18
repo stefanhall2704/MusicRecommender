@@ -5,7 +5,11 @@ from fastapi.openapi.utils import get_openapi
 from sqlalchemy.orm import Session
 from starlette.requests import Request
 
-from src.api import artist, genre
+from src.api import (
+    artist,
+    genre,
+    album
+)
 
 
 from src.utils import models
@@ -22,6 +26,7 @@ models.Base.metadata.create_all(bind=engine)
 
 app.include_router(artist.router)
 app.include_router(genre.router)
+app.include_router(album.router)
 
 
 

@@ -17,7 +17,7 @@ class Artist(Base):
         UniqueConstraint('ArtistID', name='unique_artist_id'),
     )
     """Relationships"""
-    tracks = relationship('Track', back_populates='artists')
+    # tracks = relationship('Track', back_populates='artists')
 
 class Genre(Base):
     __tablename__ = "Genre"
@@ -60,5 +60,5 @@ class Track(Base):
     artist_id = sa.Column(sa.Integer(), sa.ForeignKey('Artist.ID'), nullable=False, name="ArtistID")
     
     """Relationships"""
-    artist = relationship('Artist', back_populates='tracks')
+    # artist = relationship('Artist', back_populates='tracks')
     album = relationship('Album', back_populates='tracks')

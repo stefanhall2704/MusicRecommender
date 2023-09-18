@@ -18,6 +18,18 @@ class ArtistRequest(BaseModel):
     genre: list
     
 
+async def get_limited_db_artists(databse: Session, limit: int = 10000):
+    try:
+        database_artists = (
+            databse.query(Artist)
+            .limit(limit)
+            .all()
+        )
+        if database_artists:
+            return database_artists
+    except Exception as e:
+        print(e)
+
 async def get_artist_from_db(database: Session, artist_id: int):
     database_artist = (
         database.query(Artist)
@@ -148,3 +160,8 @@ async def delete_related_artist(
     database.delete(artist)
     database.commit()
     return {"Success"}
+
+@router.get("/limited_artists")
+async def get_limited_artists(limit: int, database: Session = Depends(get_db)):
+    artists = await get_limited_db_artists(databse=database, limit=limit)
+    return artists
