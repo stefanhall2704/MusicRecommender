@@ -39,8 +39,9 @@ class Album(Base):
     release_date = sa.Column(sa.String(100), nullable=False, name="ReleaseDate")
     total_tracks = sa.Column(sa.Integer, nullable=False, name="TotalTracks")
     type = sa.Column(sa.String(100), nullable=False, name="Type")
+    album_id = sa.Column(sa.String(100), nullable=False, name="AlbumID")
     """Relationships"""
-    tracks = relationship('Track', back_populates='album')
+    # tracks = relationship('Track', back_populates='album')
     
 class ArtistRelatedAlbum(Base):
     __tablename__ = "ArtistRelatedAlbum"
@@ -56,9 +57,9 @@ class Track(Base):
     explicit = sa.Column(sa.Boolean(), nullable=False, name="Explicit")
     track_id = sa.Column(sa.String(100), nullable=False, name="TrackID")
     spotify_url = sa.Column(sa.String(150), nullable=False, name="SpotifyURL")
-    album_id = sa.Column(sa.Integer(), sa.ForeignKey('Album.ID'), nullable=False, name="AlbumID") 
+    album_id = sa.Column(sa.Integer(), sa.ForeignKey('Album.ID'), nullable=False, name="AlbumnID") 
     artist_id = sa.Column(sa.Integer(), sa.ForeignKey('Artist.ID'), nullable=False, name="ArtistID")
     
     """Relationships"""
     # artist = relationship('Artist', back_populates='tracks')
-    album = relationship('Album', back_populates='tracks')
+    # album = relationship('Album', back_populates='tracks')

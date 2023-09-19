@@ -8,7 +8,8 @@ from starlette.requests import Request
 from src.api import (
     artist,
     genre,
-    album
+    album,
+    track
 )
 
 
@@ -27,6 +28,7 @@ models.Base.metadata.create_all(bind=engine)
 app.include_router(artist.router)
 app.include_router(genre.router)
 app.include_router(album.router)
+app.include_router(track.router)
 
 
 

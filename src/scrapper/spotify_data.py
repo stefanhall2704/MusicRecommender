@@ -45,5 +45,5 @@ class SpotifyData:
         return album_info
     
     def get_artist_albums(self, artist_id: int):
-        artist_albums = self.sp.artist_albums(artist_id=artist_id, limit=50)
+        artist_albums = self.sp.artist_albums(artist_id=artist_id, limit=49)
         return artist_albums
